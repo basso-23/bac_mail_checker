@@ -1,5 +1,6 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 
 //Proxy para las imagenes no sean bloqueadas
 const sanitizeHtml = (html) => {
@@ -211,9 +212,9 @@ const Home = () => {
     <div className="flex flex-col justify-center items-center uppercase pt-8 gap-12">
       <div>Sesión iniciada</div>
 
-      <button className="button-class" onClick={() => fetchEmails()}>
-        Cargar correos
-      </button>
+      <Button asChild>
+        <button onClick={() => fetchEmails()}>Cargar correos</button>
+      </Button>
 
       {loading && <p>Cargando correos...</p>}
 
