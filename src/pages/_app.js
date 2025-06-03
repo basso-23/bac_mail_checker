@@ -8,7 +8,7 @@ export default function App({ Component, pageProps }) {
     <SessionProvider session={pageProps.session}>
       <ThemeProvider
         attribute="class"
-        defaultTheme="dark"
+        defaultTheme="light"
         enableSystem
         disableTransitionOnChange
       >

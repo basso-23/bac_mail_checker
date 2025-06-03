@@ -123,6 +123,22 @@
 
 /* ------ SHADCN UI ------*/
 
+.fixedCenterY {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.fixedCenterX {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.fixedCenterXnY {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .mails-container {
   display: flex;
   width: 100%;
@@ -133,4 +149,39 @@
 .mail-content {
   display: flex;
   gap: 10px;
+}
+
+.loader-container {
+  position: fixed;
+  min-height: 101dvh;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loader-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.loader {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgb(0, 0, 0, 0.11);
+  border-radius: 50%;
+  border-top-color: rgb(235, 169, 47);
+  border-left-color: rgb(43, 145, 87);
+  border-right-color: rgb(20, 102, 226);
+  border-bottom-color: rgb(224, 71, 71);
+  animation: loader1776 2s linear infinite;
+}
+
+@keyframes loader1776 {
+  to {
+    transform: rotate(360deg);
+  }
 }
