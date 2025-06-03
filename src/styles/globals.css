@@ -13,5 +13,14 @@
   color: black;
 }
 
-.mail-container {
+.mails-container {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.mail-content {
+  display: flex;
+  gap: 10px;
 }

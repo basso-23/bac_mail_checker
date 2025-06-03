@@ -68,8 +68,99 @@ const Home = () => {
             (p) => p.mimeType === "text/plain" && p.body?.data
           );
 
+          let comercio = "";
+          let monto = "";
+          let tipo = "";
+          let estado = "";
+          let fechaHora = "";
+
           if (htmlPart) {
             body = decodeBase64(htmlPart.body.data);
+
+            try {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(body, "text/html");
+
+              // Ubicamos la informacion de "Fecha y hora" dentro del correo
+              const strongs1 = doc.querySelectorAll("strong");
+              strongs1.forEach((el) => {
+                if (el.textContent.trim() === "Fecha y hora") {
+                  const tr = el.closest("tr");
+                  if (tr) {
+                    tr.id = "hour_date";
+                  }
+                }
+              });
+
+              // Ubicamos la informacion de "Comercio y Monto" dentro del correo
+              const strongs2 = doc.querySelectorAll("strong");
+              strongs2.forEach((el) => {
+                if (el.textContent.trim() === "Monto") {
+                  const tr = el.closest("tr");
+                  if (tr) {
+                    tr.id = "name_plus_amount";
+                  }
+                }
+              });
+
+              // Ubicamos la informacion de "Tipo de compra y Estado" dentro del correo
+              const strongs3 = doc.querySelectorAll("strong");
+              strongs3.forEach((el) => {
+                if (el.textContent.trim() === "Tipo de compra") {
+                  const tr = el.closest("tr");
+                  if (tr) {
+                    tr.id = "type_plus_status";
+                  }
+                }
+              });
+
+              // Extraer valores de comercio y monto
+              const refRow1 = doc.getElementById("name_plus_amount");
+              if (refRow1 && refRow1.nextElementSibling) {
+                const valueRow = refRow1.nextElementSibling;
+                const tds = valueRow.querySelectorAll("td");
+                if (tds.length >= 2) {
+                  const comercioP = tds[0].querySelector("p");
+                  const montoP = tds[1].querySelector("p");
+                  comercio = comercioP?.textContent.trim() || "";
+
+                  const rawMonto = montoP?.textContent
+                    .trim()
+                    .replace(/[^\d.,-]/g, "")
+                    .replace(",", ".");
+                  const parsedMonto = parseFloat(rawMonto);
+                  monto = isNaN(parsedMonto)
+                    ? rawMonto
+                    : parsedMonto.toFixed(2);
+                }
+              }
+
+              // Extraer valores de tipo de compra y estado
+              const refRow2 = doc.getElementById("type_plus_status");
+              if (refRow2 && refRow2.nextElementSibling) {
+                const valueRow = refRow2.nextElementSibling;
+                const tds = valueRow.querySelectorAll("td");
+                if (tds.length >= 2) {
+                  const tipoP = tds[0].querySelector("p");
+                  const estadoP = tds[1].querySelector("p");
+                  tipo = tipoP?.textContent.trim() || "";
+                  estado = estadoP?.textContent.trim() || "";
+                }
+              }
+
+              // Extraer valor de fecha y hora
+              const refRow3 = doc.getElementById("hour_date");
+              if (refRow3 && refRow3.nextElementSibling) {
+                const valueRow = refRow3.nextElementSibling;
+                const td = valueRow.querySelector("td");
+                const fechaP = td?.querySelector("p");
+                fechaHora = fechaP?.textContent.trim() || "";
+              }
+
+              body = doc.documentElement.outerHTML;
+            } catch (err) {
+              console.error("Error al modificar el HTML:", err);
+            }
           } else if (plainPart) {
             body = decodeBase64(plainPart.body.data);
           } else if (msgData.payload.body?.data) {
@@ -83,6 +174,11 @@ const Home = () => {
             date: headersMap["Date"],
             body,
             isHtml: !!htmlPart,
+            comercio,
+            monto,
+            tipo,
+            estado,
+            fechaHora,
           };
         })
       );
@@ -121,17 +217,37 @@ const Home = () => {
 
       {loading && <p>Cargando correos...</p>}
 
-      <div className="mail-container">
+      <div className="mails-container">
         {emails.map((email) => {
           return (
-            <div key={email.id} onClick={() => console.log(email.body)}>
-              <div
+            <div
+              className="mail-content"
+              key={email.id}
+              onClick={() => console.log(email.id)}
+            >
+              <div>
+                <strong>Comercio:</strong> {email.comercio}
+              </div>
+              <div>
+                <strong>Monto:</strong> ${email.monto}
+              </div>
+              <div>
+                <strong>Fecha y hora:</strong> {email.fechaHora}
+              </div>
+              <div>
+                <strong>Tipo de compra:</strong> {email.tipo}
+              </div>
+              <div>
+                <strong>Estado:</strong> {email.estado}
+              </div>
+
+              {/*    <div
                 dangerouslySetInnerHTML={{
                   __html: email.isHtml
                     ? sanitizeHtml(email.body)
                     : `${email.body}`,
                 }}
-              />
+              /> */}
             </div>
           );
         })}
