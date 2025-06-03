@@ -125,7 +125,7 @@ const FetchEmails = () => {
                 if (tds.length >= 2) {
                   const comercioP = tds[0].querySelector("p");
                   const montoP = tds[1].querySelector("p");
-                  comercio = comercioP?.textContent.trim() || "";
+                  comercio = comercioP?.textContent.toLowerCase().trim() || "";
 
                   const rawMonto = montoP?.textContent
                     .trim()
@@ -196,7 +196,7 @@ const FetchEmails = () => {
     } finally {
       setTimeout(() => {
         setLoading(false);
-      }, 500);
+      }, 250);
     }
   };
 };

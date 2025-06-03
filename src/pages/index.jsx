@@ -11,6 +11,8 @@ import { emailsAtom } from "@/atom";
 import { loadingAtom } from "@/atom";
 import { fetchAtom } from "@/atom";
 
+import { FiSearch } from "react-icons/fi";
+
 //Proxy para las imagenes no sean bloqueadas
 const sanitizeHtml = (html) => {
   return html.replace(
@@ -25,6 +27,41 @@ const Home = () => {
   const [emails, setEmails] = useAtom(emailsAtom);
   const [loading, setLoading] = useAtom(loadingAtom);
   const [fetchMails, setFetchMails] = useAtom(fetchAtom);
+
+  const [expiredSession, setExpiredSession] = useState(false);
+
+  useEffect(() => {
+    const verifyExpiration = () => {
+      if (session && emails.length === 0 && !expiredSession) {
+        signOut();
+        setExpiredSession(true);
+      } else {
+        setExpiredSession(false);
+      }
+    };
+
+    verifyExpiration();
+  }, []);
+
+  useEffect(() => {
+    if (expiredSession) {
+      console.log("expiredSession TRUE");
+    } else {
+      console.log("expiredSession FALSE");
+    }
+
+    if (emails) {
+      console.log("emails FALSE");
+    } else {
+      console.log("emails FALSE");
+    }
+
+    if (session) {
+      console.log("session FALSE");
+    } else {
+      console.log("session FALSE");
+    }
+  }, [session, emails, expiredSession]);
 
   //NO SESION
   if (!session) {
@@ -58,14 +95,28 @@ const Home = () => {
         {/*//*SEARCH BAR AND BUTTONS ______________________________________________________*/}
         <div className="search-buttons-container ">
           <div className="general-padding search-buttons-content">
-            <div>
-              <Button asChild variant="default">
-                <button onClick={() => setFetchMails(!fetchMails)}>
+            <div className="search-buttons-left">
+              <div className="searchbar-container">
+                <input
+                  type="text"
+                  placeholder="Buscar comercio"
+                  className="search-input"
+                />
+                <div className="search-icon">
+                  <FiSearch />
+                </div>
+              </div>
+
+              <div>
+                <button
+                  className="update-btn"
+                  onClick={() => setFetchMails(!fetchMails)}
+                >
                   Actualizar correos
                 </button>
-              </Button>
+              </div>
             </div>
-            <div>...</div>
+            <div></div>
           </div>
         </div>
 
@@ -89,7 +140,7 @@ const Home = () => {
                     key={email.id}
                     onClick={() => console.log(email.id)}
                   >
-                    <Td className="first-th">{email.comercio}</Td>
+                    <Td className="first-th capitalize">{email.comercio}</Td>
                     <Td>${email.monto}</Td>
                     <Td>{email.fechaHora}</Td>
                     <Td>{email.tipo}</Td>
@@ -103,21 +154,21 @@ const Home = () => {
       </div>
 
       {/* 
- {emails.map((email) => {
-        return (
+  {emails.map((email) => {
+          return (
 
-          
-          <div key={email.id}>
-            <div
-              className="mail"
-              dangerouslySetInnerHTML={{
-                __html: email.isHtml ? email.body : `<pre>${email.body}</pre>`,
-              }}
-            />
-          </div>
-        );
-      })}
-      */}
+            
+            <div key={email.id}>
+              <div
+                className="mail"
+                dangerouslySetInnerHTML={{
+                  __html: email.isHtml ? email.body : `<pre>${email.body}</pre>`,
+                }}
+              />
+            </div>
+          );
+        })}
+        */}
 
       <FetchEmails />
       {loading && (
