@@ -1,6 +1,7 @@
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Table, Thead, Tbody, Tr, Th, Td } from "react-super-responsive-table";
 
 //Proxy para las imagenes no sean bloqueadas
 const sanitizeHtml = (html) => {
@@ -200,9 +201,9 @@ const Home = () => {
   if (!session) {
     return (
       <div className="flex justify-center p-8">
-        <button className="button-class" onClick={() => signIn()}>
-          Iniciar sesión con Google
-        </button>
+        <Button asChild variant="default">
+          <button onClick={() => signIn()}>Iniciar sesión con Google</button>
+        </Button>
       </div>
     );
   }
@@ -212,47 +213,36 @@ const Home = () => {
     <div className="flex flex-col justify-center items-center uppercase pt-8 gap-12">
       <div>Sesión iniciada</div>
 
-      <Button asChild>
+      <Button asChild variant="default">
         <button onClick={() => fetchEmails()}>Cargar correos</button>
       </Button>
 
       {loading && <p>Cargando correos...</p>}
 
-      <div className="mails-container">
-        {emails.map((email) => {
-          return (
-            <div
-              className="mail-content"
-              key={email.id}
-              onClick={() => console.log(email.id)}
-            >
-              <div>
-                <strong>Comercio:</strong> {email.comercio}
-              </div>
-              <div>
-                <strong>Monto:</strong> ${email.monto}
-              </div>
-              <div>
-                <strong>Fecha y hora:</strong> {email.fechaHora}
-              </div>
-              <div>
-                <strong>Tipo de compra:</strong> {email.tipo}
-              </div>
-              <div>
-                <strong>Estado:</strong> {email.estado}
-              </div>
-
-              {/*    <div
-                dangerouslySetInnerHTML={{
-                  __html: email.isHtml
-                    ? sanitizeHtml(email.body)
-                    : `${email.body}`,
-                }}
-              /> */}
-            </div>
-          );
-        })}
-      </div>
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>Comercio</Th>
+            <Th>Monto</Th>
+            <Th>Fecha y hora</Th>
+            <Th>Tipo de compra</Th>
+            <Th>Estado</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {emails.map((email) => {
+            return (
+              <Tr key={email.id} onClick={() => console.log(email.id)}>
+                <Td>{email.comercio}</Td>
+                <Td>${email.monto}</Td>
+                <Td>{email.fechaHora}</Td>
+                <Td>{email.tipo}</Td>
+                <Td>{email.estado}</Td>
+              </Tr>
+            );
+          })}
+        </Tbody>
+      </Table>
     </div>
   );
 };
