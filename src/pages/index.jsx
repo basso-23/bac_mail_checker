@@ -40,49 +40,69 @@ const Home = () => {
   //SESION INICIADA
   return (
     <>
-      <FetchEmails />
-      <div className="flex flex-col justify-center items-center uppercase pt-8 gap-12">
-        <div>Sesión iniciada</div>
-
-        <Button asChild variant="default">
-          <button onClick={() => setFetchMails(!fetchMails)}>
-            Cargar correos
-          </button>
-        </Button>
-
-        {loading && (
-          <div className="loader-container fixedCenterXnY">
-            <div className="loader"></div>
-            <div className="loader-text">Cargando correos...</div>
+      <div className="main-container">
+        {/*//*TITLE _______________________________________________________________________*/}
+        <div className="title-container general-padding">
+          <div
+            className="title-image"
+            style={{ backgroundImage: `url(${session.user.image})` }}
+          ></div>
+          <div>
+            <div className="title">Bienvenido, {session.user.name}</div>
+            <div className="subtitle leading-4">
+              Estas son tus transacciones más recientes
+            </div>
           </div>
-        )}
+        </div>
 
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>Comercio</Th>
-              <Th>Monto</Th>
-              <Th>Fecha y hora</Th>
-              <Th>Tipo de compra</Th>
-              <Th>Estado</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {emails.map((email) => {
-              return (
-                <Tr key={email.id} onClick={() => console.log(email.id)}>
-                  <Td>{email.comercio}</Td>
-                  <Td>${email.monto}</Td>
-                  <Td>{email.fechaHora}</Td>
-                  <Td>{email.tipo}</Td>
-                  <Td>{email.estado}</Td>
-                </Tr>
-              );
-            })}
-          </Tbody>
-        </Table>
+        {/*//*SEARCH BAR AND BUTTONS ______________________________________________________*/}
+        <div className="search-buttons-container ">
+          <div className="general-padding search-buttons-content">
+            <div>
+              <Button asChild variant="default">
+                <button onClick={() => setFetchMails(!fetchMails)}>
+                  Actualizar correos
+                </button>
+              </Button>
+            </div>
+            <div>...</div>
+          </div>
+        </div>
 
-        {/* 
+        {/*//*TABLE _______________________________________________________________________*/}
+        <div>
+          <Table>
+            <Thead className="table-head ">
+              <Tr>
+                <Th className="first-th">Comercio</Th>
+                <Th>Monto</Th>
+                <Th>Fecha y hora</Th>
+                <Th>Tipo de compra</Th>
+                <Th>Estado</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {emails.map((email) => {
+                return (
+                  <Tr
+                    className="general-padding"
+                    key={email.id}
+                    onClick={() => console.log(email.id)}
+                  >
+                    <Td className="first-th">{email.comercio}</Td>
+                    <Td>${email.monto}</Td>
+                    <Td>{email.fechaHora}</Td>
+                    <Td>{email.tipo}</Td>
+                    <Td>{email.estado}</Td>
+                  </Tr>
+                );
+              })}
+            </Tbody>
+          </Table>
+        </div>
+      </div>
+
+      {/* 
  {emails.map((email) => {
         return (
 
@@ -98,7 +118,14 @@ const Home = () => {
         );
       })}
       */}
-      </div>
+
+      <FetchEmails />
+      {loading && (
+        <div className="loader-container fixedCenterXnY">
+          <div className="loader"></div>
+          <div className="loader-text">Cargando correos...</div>
+        </div>
+      )}
     </>
   );
 };

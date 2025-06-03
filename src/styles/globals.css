@@ -6,7 +6,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #fffefe;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -37,7 +37,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  font-family: "Inter Variable", sans-serif;
+  font-family: "Fira Sans", sans-serif;
 }
 
 @theme inline {
@@ -184,4 +184,80 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* ------ FINAL STYLES ------*/
+
+.main-container {
+  min-height: 100dvh;
+  width: 100%;
+  padding: 42px 0px;
+}
+
+.general-padding {
+  padding: 0px 42px;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.title {
+  color: #2c3b43;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.subtitle {
+  color: #515151;
+  font-size: 15px;
+}
+
+.title-image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 50px;
+  aspect-ratio: 1/1;
+  border-radius: 9999px;
+  overflow: hidden;
+  box-shadow: rgba(14, 63, 126, 0.04) 0px 0px 0px 1px,
+    rgba(42, 51, 69, 0.04) 0px 1px 1px -0.5px,
+    rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px,
+    rgba(42, 51, 70, 0.04) 0px 6px 6px -3px,
+    rgba(14, 63, 126, 0.04) 0px 12px 12px -6px,
+    rgba(14, 63, 126, 0.04) 0px 24px 24px -12px;
+}
+
+.search-buttons-container {
+  background-color: #f8f8f8;
+  height: 75px;
+  width: 100%;
+  display: flex;
+  margin-top: 42px;
+}
+
+.search-buttons-content {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.table-head {
+  background-color: #eff0f3;
+  color: #262b30;
+  line-height: 1;
+}
+
+.first-th {
+  padding-left: 42px !important;
+}
+
+.table-head th {
+  padding: 16px 0px;
+  text-align: left;
+  font-size: 14px;
 }

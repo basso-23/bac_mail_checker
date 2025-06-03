@@ -23,6 +23,8 @@ const FetchEmails = () => {
   const [loading, setLoading] = useAtom(loadingAtom);
   const [fetchMails, setFetchMails] = useAtom(fetchAtom);
 
+  const QUANTITY_MAILS = "20";
+
   useEffect(() => {
     fetchEmails();
   }, [fetchMails]);
@@ -40,7 +42,7 @@ const FetchEmails = () => {
       const listRes = await fetch(
         `https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(
           query
-        )}&maxResults=10`,
+        )}&maxResults=${QUANTITY_MAILS}`,
         { headers }
       );
       const listData = await listRes.json();
